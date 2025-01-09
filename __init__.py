@@ -1,17 +1,32 @@
 import os
 import pathlib
 import requests
+import bcrypt
 from flask import Flask, render_template, session, abort, redirect, request
+from flask_mongoengine import MongoEngine
+from dotenv import load_dotenv
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
+# from . import mongoDB
+# from . import mongoDB
+import mongoDB
+import pb
+
 # from .config import config
 from config import config
 
+load_dotenv()
 app = Flask(__name__)
 app.secret_key = config.get("APP_SECRET_KEY")
+database_URI = os.getenv("DATABASE_URI")
+app.config["MONGODB_SETTINGS"] = {"host": database_URI}
+
+db = MongoEngine()
+db.init_app(app)
+
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 GOOGLE_CLIENT_ID = config.get("GOOGLE_CLIENT_ID")
@@ -41,6 +56,25 @@ def login_is_required(function):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
+
+@app.route("/register_user", methods=["POST"])
+def add_user():
+    first_name = request.form.get("firstName")
+    last_name = request.form.get("lastName")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    if first_name and last_name and email and password:
+        hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        mongoDB.add_user(first_name, last_name, email, hashedPassword)
+        return redirect("/main_page")
+    else:
+        return "Not all fields were filled!!"
 
 
 @app.route("/login")
