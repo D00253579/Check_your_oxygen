@@ -1,7 +1,6 @@
 import os
 import pathlib
 import requests
-import bcrypt
 from flask import Flask, render_template, session, abort, redirect, request
 from flask_mongoengine import MongoEngine
 from dotenv import load_dotenv
@@ -70,18 +69,29 @@ def add_user():
     email = request.form.get("email")
     password = request.form.get("password")
     if first_name and last_name and email and password:
-        hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-        mongoDB.add_user(first_name, last_name, email, hashedPassword)
+        mongoDB.add_user(first_name, last_name, email, password)
         return redirect("/main_page")
     else:
         return "Not all fields were filled!!"
 
 
 @app.route("/login")
-def login():
+def googleLogin():
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
+
+
+@app.route("/normal_login", methods=["POST"])
+def login():
+    email = request.form.get("email")
+    password = request.form.get("password")
+    check_user = mongoDB.check_users(email, password)
+    print(check_user)
+    if check_user is True:
+        return redirect("/main_page")
+    else:
+        return redirect("/")
 
 
 @app.route("/main_page")
