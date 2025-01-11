@@ -82,6 +82,12 @@ def googleLogin():
     return redirect(authorization_url)
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
+
 @app.route("/normal_login", methods=["POST"])
 def login():
     email = request.form.get("email")
@@ -94,6 +100,7 @@ def login():
         return redirect("/")
 
 
+@login_is_required
 @app.route("/main_page")
 def main_Page():
     return render_template("mainPage.html")
