@@ -16,6 +16,18 @@ class Users(db.Document):
     user_password = db.StringField()
 
 
+class UserWarnings(db.Document):
+    meta = {"collection": "userWarnings"}
+    current_notification = db.StringField()
+    sent_at = db.DateTimeField(default=datetime.datetime.now)
+
+
+class Warnings(db.Document):
+    meta = {"collection": "warnings"}
+    message = db.StringField()
+    action = db.StringField()
+
+
 def hashPassword(password):
     hashedPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     return hashedPassword.decode()
