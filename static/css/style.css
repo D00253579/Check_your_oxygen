@@ -1,8 +1,11 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 html,
 body {
   height: 100%;
-  background-color: #81d4e4;  
+  background-color: #abf5d3;
+  font-family: "Ubuntu", serif;
+  font-weight: 300;
+  font-style: normal; 
 }
 .login-with-google-btn {
     transition: background-color .3s, box-shadow .3s;
@@ -45,3 +48,14 @@ body {
       cursor: not-allowed;
     }
   }
+.navbar-background{
+  background-color: #71f5b7;
+}
+
+.imagePadding{
+  padding-left: 27%;
+}
+
+.titleColour{
+  color:#555555;
+}
