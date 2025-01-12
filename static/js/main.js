@@ -4,7 +4,7 @@ let appChannel2 = "Hardware-channel"
 
 function hideTemp() {
     document.getElementById("initial_temperature").style.display = "none"
-    document.getElementById("initial_temperature2").style.display = "none"
+    document.getElementById("initial_temperature2").style.display = "block"
 }
 function sendNotification() {
     publishMessage(document.getElementById("current_status").innerHTML)
