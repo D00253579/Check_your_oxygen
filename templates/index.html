@@ -44,12 +44,15 @@
                             <div class="divider d-flex align-items-center my-4">
                                 <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                             </div>
-
-                            <a href="/login"><button type="button" class="login-with-google-btn">
-                                    Sign in with Google
-                                </button></a>
                         </form>
                     </div>
+                    <form action="/login" method="POST">
+                        <button type="button" class="login-with-google-btn googleButtonMargin">
+                            Sign in with Google
+                        </button>
+                        <input type="number" id="initial_temperature2" name="pubnub_temperature2"
+                            class="w-2 mx-auto mb-4">
+                    </form>
             </div>
         </div>
     </body>
