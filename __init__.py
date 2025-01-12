@@ -13,6 +13,7 @@ import google.auth.transport.requests
 # from . import mongoDB
 import mongoDB
 import pb
+import time
 
 # from .config import config
 from config import config
@@ -70,7 +71,7 @@ def add_user():
     password = request.form.get("password")
     if first_name and last_name and email and password:
         mongoDB.add_user(first_name, last_name, email, password)
-        return redirect("/main_page")
+        return redirect("/")
     else:
         return "Not all fields were filled!!"
 
@@ -92,6 +93,9 @@ def logout():
 def login():
     email = request.form.get("email")
     password = request.form.get("password")
+    current_temperature = request.form.get("pubnub_temperature")
+    current_temperature = int(current_temperature)
+    mongoDB.add_User_Warning(current_temperature)
     check_user = mongoDB.check_users(email, password)
     print(check_user)
     if check_user is True:
@@ -103,7 +107,8 @@ def login():
 @login_is_required
 @app.route("/main_page")
 def main_Page():
-    return render_template("mainPage.html")
+    current_warning = mongoDB.get_current_user_warning()
+    return render_template("mainPage.html", current_warning=current_warning)
 
 
 @app.route("/callback")

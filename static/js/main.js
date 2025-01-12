@@ -1,6 +1,10 @@
 let pubnub;
 let appChannel1 = "Temp-channel";
 
+function hideTemp() {
+    document.getElementById("initial_temperature").style.display = "none"
+}
+
 const setupPubNub = () => {
     pubnub = new PubNub({
         publishKey: 'pub-c-a4eb9e1f-e4e5-4791-8581-66149beb12a4',
@@ -34,12 +38,10 @@ const publishMessage = async (message) => {
 };
 
 function handleMessage(message) {
-    let cupDetectionInput = document.getElementById("cup_detection")
-
     console.log('Message: ' + message);
     if (parseInt(message)) {
         console.log("MESSAGE FROM PUBNUB: ", message)
-        document.getElementById("current_temperature").innerHTML = message
+        document.getElementById("initial_temperature").value = message
     }
     else if (message == "Cup detected") {
 

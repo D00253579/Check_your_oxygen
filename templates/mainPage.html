@@ -22,12 +22,20 @@
                 </form>
             </div>
         </nav>
-        <div class="container py-5 h-100 w-100 bg-light">
+        <div class="container py-5 mainPageSize bg-light">
             <h1 class="d-flex align-items-center justify-content-center titleColour">Oxygen level indicator</h1>
-            <img src="/static/Oxygen.jpg" class="imagePadding" alt="Oxygen image">
-            <h3 class="titleColour">Current temperature:</h3>
-            <h3 id="current_temperature">...</h3>
-            <h3 class="d-flex align-items-center justify-content-center titleColour">Status:</h3>
+            <img src="/static/Oxygen.jpg" class="imagePadding pb-5" alt="Oxygen image">
+            {% if current_warning["current_warning"] %}
+            {% for warning in current_warning["current_warning"] %}
+            <h3 class="d-flex titleColour pb-5">Current temperature: <span class="ps-4"
+                    id="current_temperature">{{ warning.current_temperature }}</span>
+            </h3>
+            <h3 class="d-flex titleColour pb-5">Status: <span class="ps-4" id="current_status">"{{
+                    warning.current_notification }} "</span></h3>
+            <h3 class="d-flex titleColour">Action: <span class="ps-4" id="current_action">{{
+                                warning.current_action }}</span></h3>
+            {% endfor %}
+            {% endif %}
         </div>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

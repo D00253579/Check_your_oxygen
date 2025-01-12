@@ -59,3 +59,8 @@ body {
 .titleColour{
   color:#555555;
 }
+
+.mainPageSize{
+  height:800px;
+  width:1500px;
+}

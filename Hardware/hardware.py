@@ -61,8 +61,8 @@ def main():
             # Read Temp and Hum from DHT22
             h, t = dht.read_retry(dht.DHT22, DHT)
             # Print Temperature and Humidity on Shell window
-            print("Temp={0:0.1f}*C".format(t))
-            pubnub.publish().channel(app_channel).message("{0:0.1f}".format(t)).sync()
+            print("Temp={0}*C".format(round(t)))
+            pubnub.publish().channel(app_channel).message("{0}".format(round(t))).sync()
             sleep(5)  # Wait 5 seconds and read again
     except KeyboardInterrupt:
         GPIO.cleanup()
