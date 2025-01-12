@@ -17,6 +17,7 @@ import time
 
 # from .config import config
 from config import config
+from events import socketio
 
 load_dotenv()
 app = Flask(__name__)
@@ -26,7 +27,7 @@ app.config["MONGODB_SETTINGS"] = {"host": database_URI}
 
 db = MongoEngine()
 db.init_app(app)
-
+socketio.init_app(app)
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 GOOGLE_CLIENT_ID = config.get("GOOGLE_CLIENT_ID")
@@ -138,4 +139,4 @@ def callback():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)
