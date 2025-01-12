@@ -42,29 +42,26 @@ app_channel2 = "Hardware-channel"
 subscription = pubnub.channel(app_channel).subscription()
 subscription.subscribe()
 subscription2 = pubnub.channel(app_channel2).subscription()
-subscription2.on_message = lambda message: handle_message(message)
-subscription2.subscribe()
 publish_result = (
     pubnub.publish().channel(app_channel).message("Hello from CheckYourOxygen").sync()
 )
 
 
-# The main function simulates data retrieval of temperature inputs and reacts accordingly
 def handle_message(message):
     print("LED MESSAGE:" + message.message)
     temp_notification = str(message.message)
     if temp_notification == '"Oxygen levels are normal "':
-        turn_on(green_led)  # turn on red LED        - coffee is too hot
+        turn_on(green_led)
         pubnub.publish().channel(app_channel2).message("Green LED Activated").sync()
     elif temp_notification == '"Air quality depleting "':
-        turn_on(yellow_led)  # turn on red LED        - coffee is too hot
+        turn_on(yellow_led)
         pubnub.publish().channel(app_channel2).message("Yellow LED Activated").sync()
     elif (
         temp_notification == '"WARNING! Air Quality Poor "'
         or temp_notification == '"EXTREME TEMPERATURE WARNING ABNORMAL HEAT LEVELS "'
         or temp_notification == '"EXTREME TEMPERATURE WARNING ABNORMAL COLD LEVELS "'
     ):
-        turn_on(red_led)  # turn on red LED        - coffee is too hot
+        turn_on(red_led)
         beep(3)
         pubnub.publish().channel(app_channel2).message(
             "Red LED Activated and buzzer activated"
@@ -86,27 +83,29 @@ def turn_off(pin):
 
 def beep(repeat):
     try:
-        while True:
-            for i in range(0, repeat):
-                for pulse in range(60):
-                    GPIO.output(buzzer_pin, True)
-                    time.sleep(0.001)
-                    GPIO.output(buzzer_pin, False)
-                    time.sleep(0.001)
-                time.sleep(0.1)
+        for i in range(0, repeat):
+            for pulse in range(300):
+                GPIO.output(buzzer_pin, True)
+                time.sleep(0.001)
+                GPIO.output(buzzer_pin, False)
+                time.sleep(0.001)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         GPIO.cleanup()
 
 
 def main():
     try:
+
+        subscription2.on_message = lambda message: handle_message(message)
+        subscription2.subscribe()
+
+        time.sleep(1)
         while True:
-            # Read Temp and Hum from DHT22
             h, t = dht.read_retry(dht.DHT22, DHT)
-            # Print Temperature and Humidity on Shell window
             print("Temp={0}*C".format(round(t)))
             pubnub.publish().channel(app_channel).message("{0}".format(round(t))).sync()
-            sleep(5)  # Wait 5 seconds and read again
+            sleep(3)
     except KeyboardInterrupt:
         GPIO.cleanup()
 

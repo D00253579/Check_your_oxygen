@@ -7,6 +7,7 @@ function hideTemp() {
     document.getElementById("initial_temperature2").style.display = "block"
 }
 function sendNotification() {
+    document.getElementById("new_temp").style.display = "block"
     publishMessage(document.getElementById("current_status").innerHTML)
 }
 const setupPubNub = () => {
