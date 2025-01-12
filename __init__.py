@@ -76,8 +76,11 @@ def add_user():
         return "Not all fields were filled!!"
 
 
-@app.route("/login")
+@app.route("/login", methods=["POST"])
 def googleLogin():
+    current_temperature = request.form.get("pubnub_temperature2")
+    current_temperature = int(current_temperature)
+    mongoDB.add_User_Warning(current_temperature)
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)

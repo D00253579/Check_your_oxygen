@@ -85,7 +85,7 @@ def get_notification(current_temperature):
     elif int(current_temperature) >= 20 and int(current_temperature) <= 26:
         warning = Warnings.objects.get(message="Oxygen levels are normal")
     else:
-        warning = Warning.objects.get(message="Air quality depleting")
+        warning = Warnings.objects.get(message="Air quality depleting")
 
     if warning:
         return warning.message
